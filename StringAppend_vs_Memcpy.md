@@ -2,19 +2,17 @@ Std::string append seems to be slower than raw memcpy, even when std:.string::re
 
 
 ```C++
-#include <cstring>
-
-static void BM_StringA(benchmark::State& state) {
+static void BM_StringAppend(benchmark::State& state) {
   
   const std::string hello("Hello");
   const std::string world("World");
 
   std::string str;
-  str.reserve( hello.size()*2 + world.size()*2 );
 
   while (state.KeepRunning())
   {
     str.clear();
+    str.reserve( hello.size()*2 + world.size()*2 );
     str += (hello);
     str += (world);
     str += (hello);
@@ -22,18 +20,19 @@ static void BM_StringA(benchmark::State& state) {
   }
 }
 // Register the function as a benchmark
-BENCHMARK(BM_StringA);
+BENCHMARK(BM_StringAppend);
 
-static void BM_StringC(benchmark::State& state) {
+
+static void BM_StringMemcpy(benchmark::State& state) {
 
   const std::string hello("Hello");
   const std::string world("World");
 
   std::string str;
-  str.resize( hello.size()*2 + world.size()*2 );
-
+  
   while (state.KeepRunning())
   {
+    str.resize( hello.size()*2 + world.size()*2 );
     char *buffer = &str[0];
     std::memcpy( buffer,    hello.data(), hello.size());
     buffer += hello.size();
@@ -44,5 +43,5 @@ static void BM_StringC(benchmark::State& state) {
     std::memcpy( buffer, world.data(), world.size());
   }
 }
-BENCHMARK(BM_StringC);
+BENCHMARK(BM_StringMemcpy);
 ```
