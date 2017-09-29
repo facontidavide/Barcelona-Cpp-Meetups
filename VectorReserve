@@ -35,5 +35,4 @@ We all know this, but it is worth reminding it sometimes...
   }
 
   BENCHMARK(BM_Resize);
-
 ```
