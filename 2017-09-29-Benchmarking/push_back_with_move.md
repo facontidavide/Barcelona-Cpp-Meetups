@@ -14,7 +14,6 @@ static void StringPush(benchmark::State& state)
     benchmark::DoNotOptimize(buffer);
   }
 }
-// Register the function as a benchmark
 BENCHMARK(StringPush);
 
 static void StringMove(benchmark::State& state) 
